@@ -1,0 +1,1 @@
+export let __environment__: 'development'|'production' = "development";
