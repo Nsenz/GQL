@@ -12,6 +12,16 @@ export const userType = gql`
     name: String!
   }
 
+  type PageInfo{
+    endCursor: ID,
+    hasNextPage: Boolean!
+  }
+
+  type PaginatedUserResult{
+    users: [User!]!
+    pageInfo: PageInfo!
+  }
+
   type User {
     _id: ID
     username: String!
@@ -33,6 +43,7 @@ export const userType = gql`
 
   type Query {
     users: [User]
+    paginatedUsers(first: Int, after: ID): PaginatedUserResult
     user(_id: ID!): User
   }
 

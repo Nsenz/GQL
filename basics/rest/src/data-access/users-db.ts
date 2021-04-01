@@ -5,6 +5,7 @@ import {Db} from 'mongodb';
 export function buildUsersDb(dbClient: Db){
     return Object.freeze({
         findAll,
+        findById,
         insertOne
     });
     async function findAll(){
@@ -16,7 +17,16 @@ export function buildUsersDb(dbClient: Db){
             console.log(err);
             throw new Error(err);
         }
-    }
+    };
+    async function findById({_id}:{_id:string}){
+        try{
+            const user = await dbClient.collection('users').findOne({_id: _id});
+            return user;
+        } catch(err){
+            console.log(err);
+            throw new Error(err);
+        }
+    };
     async function insertOne({userInfo} : {userInfo: User}) {
         try{
             const addUser = buildAddUser(dbClient.collection('users'));
@@ -25,5 +35,5 @@ export function buildUsersDb(dbClient: Db){
             console.log(err);
             throw new Error(err);
         }
-    }
+    };
 }

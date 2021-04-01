@@ -9,6 +9,39 @@ export function buildUserResolvers(dbClient: Db){
                 await dbClient.collection('users').find().forEach(user => users.push(user));
                 return users;
             },
+            paginatedUsers: async (_: any, {first, after} : {first: number, after: string})=>{
+                if (first < 0) {
+                    throw new Error('Invalid number of first elements');
+                }
+                if (after) {
+                    const users = {
+                        users: [] as any[],
+                        pageInfo: {}
+                    };
+                    const cursor = dbClient.collection('users').find({_id: {
+                        $gt: new ObjectId(after)
+                    }});
+                    const collectionLength = await cursor.count();
+                    if(collectionLength <= first){
+                        await cursor.limit(collectionLength).forEach(user => {
+                            users.users.push(user);
+                        });
+                        users.pageInfo = {
+                            endCursor: null,
+                            hasNextPage: false
+                        };
+                    } else {
+                        await cursor.limit(first).forEach(user => {
+                            users.users.push(user);
+                        });
+                        users.pageInfo = {
+                            endCursor: users.users[first-1]._id,
+                            hasNextPage: true
+                        };
+                    };
+                    return users;
+                } else throw new Error('Paginated request must have "after" parameter');
+            },
             user: async (_: any, {_id} : {_id: string})=>{
                 const user = await dbClient.collection('users').findOne({_id: new ObjectId(_id)});
                 return user;
