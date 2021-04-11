@@ -1,26 +1,19 @@
 import {usersDB} from '../data-access';
 
 export function buildGetUser() {
-  return async function getUserById({_id}:{_id: string}) {
-    const headers = {
-      'Content-Type': 'application/json'
-    }
+  return async function getUserById({_id, httpResponse}:{_id: string, httpResponse?: any}) {
     try {
       const user = await (await usersDB).findById({_id});
-      return {
-        headers,
-        statusCode: 200,
-        body: user
+      if(httpResponse){
+        if(user) httpResponse.status(200).send(user).end();
+        else httpResponse.status(500).send({success: false}).end(); 
+      } else {
+        return user;
       }
     } catch (e) {
       console.log(`${new Date()} : An error when getting users has occured`);
-      return {
-        headers,
-        statusCode: 400,
-        body: {
-          error: e.message
-        }
-      }
+      httpResponse.status(500).send({success:false}).end();
+      throw new Error(e);
     }
   }
 }

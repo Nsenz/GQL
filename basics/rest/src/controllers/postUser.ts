@@ -1,9 +1,9 @@
 import { usersDB } from '../data-access';
 
-export function buildPostUser(uuid: () => string) {
+export function buildPostUser(uuid: () => string, hash: (password: string)=>Promise<string>) {
     return async function postUser(httpRequest: any) {
         try {
-            const { source = {}, username, password } = httpRequest.body
+            const { source = {}, username, password, role } = httpRequest.body
             source.ip = httpRequest.ip
             source.browser = httpRequest.headers['User-Agent']
             if (httpRequest.headers['Referer']) {
@@ -13,8 +13,8 @@ export function buildPostUser(uuid: () => string) {
                 userInfo:{
                     _id: uuid(),
                     username,
-                    password: password,
-                    blockchain: uuid()
+                    role,
+                    password: await hash(password),
                 }
             });
             return {

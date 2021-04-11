@@ -6,7 +6,8 @@ export function buildUsersDb(dbClient: Db){
     return Object.freeze({
         findAll,
         findById,
-        insertOne
+        insertOne,
+        findByUsername
     });
     async function findAll(){
         try{
@@ -36,4 +37,14 @@ export function buildUsersDb(dbClient: Db){
             throw new Error(err);
         }
     };
+    async function findByUsername(username: string){
+        try{
+            const user = await dbClient.collection('users').findOne({username: username});
+            if(user) return user;
+            return null;
+        } catch (err){
+            console.log(err);
+            throw new Error(err);
+        }
+    }
 }

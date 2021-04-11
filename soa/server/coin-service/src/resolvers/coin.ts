@@ -6,12 +6,13 @@ export function buildCoinResolvers(dbClient: Db): any{
             coins: async ()=> {
                 const coins: any[] = [];
                 await dbClient.collection('coins').find().forEach(coin => coins.push(coin));
+                console.log(`${new Date()} : Fetching coins`);
                 return coins;
             }
         },
         Coin: {
-            watchers: (coin: any) => {
-                return coin.watchers.map((watcher: any) => ({ __typename: "User", _id: watcher }));
+            subscribers: (coin: any) => {
+                return coin.subscribers.map((subscribers: any) => ({ __typename: "User", _id: subscribers }));
             } 
         },
         User: {
@@ -20,24 +21,26 @@ export function buildCoinResolvers(dbClient: Db): any{
                 await dbClient.collection('coins').find().forEach(coin => {
                     coins.push(coin);
                 });
-                return coins.filter((coin)=>coin.watchers.find((watcher: any)=> watcher == user._id));
+                console.log(`${new Date()} : Fetching users`);
+                return coins.filter((coin)=>coin.subscribers.find((subscribers: any)=> subscribers == user._id));
             }
         },
         Mutation: {
-            addCoinWatcher: async (_: any, input: any) => {
+            addCoinsubscribers: async (_: any, input: any) => {
                 const coin = await dbClient.collection('coins').findOne({_id: new ObjectId(input._id)});
                 if(coin){
-                    const watchers: any[] = coin.watchers;
-                    if(!watchers.find(watcher => watcher == input.userId)){
-                        watchers.push(String(input.userId));
+                    const subscribers: any[] = coin.subscribers;
+                    if(!subscribers.find(subscribers => subscribers == input.userId)){
+                        subscribers.push(String(input.userId));
                     }
                     await dbClient.collection('coins').updateOne({
                         _id: new ObjectId(input._id)
                     }, {
                         $set: {
-                            watchers: watchers
+                            subscribers: subscribers
                         }
                     });
+                    console.log(`${new Date()} : Adding a new coin subscriber`);
                     return true;
                 }
                 return false;
@@ -50,8 +53,9 @@ export function buildCoinResolvers(dbClient: Db): any{
                         symbol: input.coin.symbol,
                         icon: input.coin.icon||"NaN",
                         volume24: input.coin.volume24||"NaN",
-                        watchers: []
+                        subscribers: []
                     });
+                    console.log(`${new Date()} : Adding a new coin`);
                     return true;
                 } catch (err){
                     return false;

@@ -3,6 +3,12 @@ import {gql} from 'apollo-server';
 export const userType = gql`
     scalar Date
 
+    enum ROLE{
+      USER,
+      ADMIN,
+      MODERATOR
+    }
+
     interface Entity{
       _id: ID!
       username: String!
@@ -13,19 +19,23 @@ export const userType = gql`
         _id: ID!
         username: String!
         password: String!
+        role: ROLE!
     }
 
     input UserInput{
       username: String!
       password: String!
+      role: ROLE!
     }
 
     extend type Query{
       users: [User]!
+      me: User
       paginatedUsers(page: Int, limit: Int): [User]!
     }
 
     extend type Mutation{
-      createUser(userInput: UserInput): Boolean
+      register(userInput: UserInput): Boolean
+      login(username: String!, password: String!): String
     }
 `;

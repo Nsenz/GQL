@@ -1,19 +1,25 @@
+export enum ROLE{
+  USER,
+  ADMIN,
+  MODERATOR
+};
+
 export function buildCreateUser () {
   return function createUser ({
       _id,
       username,
       password,
-      blockchain,
+      role,
       createdAt = new Date()
-  }: {_id: string, username: string, password: string, blockchain: string, createdAt?: Date}) {
+  }: {_id: string, username: string, password: string, role: ROLE, createdAt?: Date}) {
+    if(!role || !(role in ROLE)){
+      throw new Error("User must have a valid role");
+    }
     if (!username || username.length < 4) {
       throw new Error('User must have a valid username');
     }
     if (!password || password.length < 6) {
       throw new Error('User must have a valid password');
-    }
-    if(!blockchain){
-      throw new Error('User must have a valid blockchain');
     }
     if(!_id){
       throw new Error('User must have a valid id');
@@ -22,7 +28,7 @@ export function buildCreateUser () {
         getId: ()=>_id,
         getUsername: ()=>username,
         getPassword: ()=>password,
-        getBlockchain: ()=>blockchain,
+        getRole: ()=>role,
         getCreatedAt: ()=>createdAt
     });
   }

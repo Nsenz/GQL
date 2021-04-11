@@ -34,7 +34,7 @@ export const userType = gql`
 
   type Movie implements Leisure {
     name: String!
-    duration: Float!
+    runningTime: Float!
   }
 
   type Magazine implements Leisure {
@@ -53,7 +53,7 @@ export const userType = gql`
       password: String!
       role: ROLE!
     ): Boolean
-    addMovieLeisure(leisureInput: LeisureInput!, duration: Float!): Boolean
+    addMovieLeisure(leisureInput: LeisureInput!, runningTime: Float!): Boolean
     addMagazineLeisure(leisureInput: LeisureInput!): Boolean
   }
 

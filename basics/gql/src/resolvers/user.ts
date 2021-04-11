@@ -58,13 +58,13 @@ export function buildUserResolvers(dbClient: Db){
                     return false;
                 }
             },
-            addMovieLeisure: async (_:any, {leisureInput: {id, name}, duration}: any) => {
+            addMovieLeisure: async (_:any, {leisureInput: {id, name}, runningTime}: any) => {
                 const user = await dbClient.collection('users').findOne({_id: new ObjectId(id)});
                 if(user){
                     const leisure = user.leisure;
                     leisure.push({
                         name,
-                        duration
+                        runningTime
                     });
                     await dbClient.collection('users').updateOne({_id: new ObjectId(id)}, {$set: {
                         leisure: leisure
@@ -90,7 +90,7 @@ export function buildUserResolvers(dbClient: Db){
         },
         Leisure: {
             __resolveType(obj: any) {
-                if (obj.duration) {
+                if (obj.runningTime) {
                     return 'Movie';
                 }
                 return 'Magazine';

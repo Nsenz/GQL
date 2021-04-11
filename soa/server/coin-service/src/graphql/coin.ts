@@ -8,7 +8,7 @@ export const coinType = gql`
         symbol: String!
         icon: String
         volume24: String
-        watchers: [User]
+        subscribers: [User]
     }
 
     input CoinInput{
@@ -29,7 +29,7 @@ export const coinType = gql`
     }
 
     extend type Mutation{
-        addCoinWatcher(_id: ID!, userId: ID!): Boolean
+        addCoinsubscribers(_id: ID!, userId: ID!): Boolean
         addCoin(coin: CoinInput!): Boolean
     }
 `
