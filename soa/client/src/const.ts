@@ -1,0 +1,6 @@
+export enum SECTION_KEYS{
+    HOME,
+    ACCOUNT_SETTINGS,
+    WATCHLIST,
+    WATCHLIST_HISTORY
+};

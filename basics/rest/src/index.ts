@@ -39,25 +39,15 @@ const main = async () => {
          async (_: any, res: any) => {
             res.status(200).send((res as any).paginatedResult);
         });
-        server.get('/user/:userId', accessMiddleware,
-            async (req: any, res: any) => {
-                const _id = req.params.userId as string;
-                await controllers.getUserById({ _id, httpResponse: res });
-            });
-        server.post('/register', async (req, res) => {
-            const result = await controllers.postUser(req);
-            res.status(result.statusCode).send(result.body);
-        });
-        server.post('/login', async (req, res) => {
-            await controllers.loginUser(req, res);
-        });
+        server.get('/user/:id', accessMiddleware, controllers.getUserById);
+        server.post('/register', controllers.postUser);
+        server.post('/login', controllers.loginUser);
         server.get('/me', accessMiddleware, async (req, res) => {
             const userId = jwt.decode(req.headers.authorization!)?.sub as string;
-            await controllers.getUserById({ _id: userId, httpResponse: res });
+            req.params.id = userId;
+            await controllers.getUserById(req, res);
         });
-        server.get('/logout', async (req, res) => {
-            await controllers.logoutUser(req, res);
-        });
+        server.get('/logout', controllers.logoutUser);
         server.listen(3000, () => {
             console.log("The server is up on port 3000");
         });

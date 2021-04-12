@@ -1,7 +1,7 @@
 import { usersDB } from '../data-access';
 
 export function buildPostUser(uuid: () => string, hash: (password: string)=>Promise<string>) {
-    return async function postUser(httpRequest: any) {
+    return async function postUser(httpRequest: any, httpResponse: any) {
         try {
             const { source = {}, username, password, role } = httpRequest.body
             source.ip = httpRequest.ip
@@ -17,23 +17,10 @@ export function buildPostUser(uuid: () => string, hash: (password: string)=>Prom
                     password: await hash(password),
                 }
             });
-            return {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Last-Modified': new Date().toUTCString()
-                },
-                statusCode: 201,
-                body: { success: true }
-            }
+            httpResponse.status(201).send({success: true}).end();
         } catch (err) {
             console.log(err);
-            return {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                statusCode: 400,
-                body: err.message
-            }
+            httpResponse.status(400).send({error: err.message}).end();
         }
     }
 }
