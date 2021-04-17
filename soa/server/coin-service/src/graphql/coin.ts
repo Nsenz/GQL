@@ -29,7 +29,8 @@ export const coinType = gql`
     }
 
     extend type Mutation{
-        addCoinsubscribers(_id: ID!, userId: ID!): Boolean
-        addCoin(coin: CoinInput!): Boolean
+        addCoinsubscribers(_id: ID!, userId: ID!): Boolean!
+        removeCoinsubscribers(_id: ID!, userId: ID!): Boolean!
+        addCoin(coin: CoinInput!): Boolean!
     }
 `

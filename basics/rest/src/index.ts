@@ -16,9 +16,6 @@ import { checkAccess } from './middlewares/checkAccess';
 const main = async () => {
     if (cluster.isMaster) {
         cluster.fork();
-        cluster.fork();
-        cluster.fork();
-        cluster.fork();
 
         cluster.on('exit', () => {
             console.error(`${new Date()} : A process has died .... restarting .....`);
@@ -37,7 +34,7 @@ const main = async () => {
         server.use(useragent.express());
         server.get('/users', [accessMiddleware,usersPaginationMiddleware],
          async (_: any, res: any) => {
-            res.status(200).send((res as any).paginatedResult);
+            res.status(200).send(res.paginatedResult);
         });
         server.get('/user/:id', accessMiddleware, controllers.getUserById);
         server.post('/register', controllers.postUser);
@@ -47,7 +44,7 @@ const main = async () => {
             req.params.id = userId;
             await controllers.getUserById(req, res);
         });
-        server.get('/logout', controllers.logoutUser);
+        server.get('/logout', accessMiddleware, controllers.logoutUser);
         server.listen(3000, () => {
             console.log("The server is up on port 3000");
         });

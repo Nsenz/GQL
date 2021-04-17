@@ -1,4 +1,5 @@
 import {Db, ObjectId} from 'mongodb';
+import jwt from 'jsonwebtoken';
 
 export function buildCoinResolvers(dbClient: Db): any{
     return {
@@ -26,9 +27,10 @@ export function buildCoinResolvers(dbClient: Db): any{
             }
         },
         Mutation: {
-            addCoinsubscribers: async (_: any, input: any) => {
+            addCoinsubscribers: async (_: any, input: any, req: any) => {
+                const senderId = jwt.decode(req.user.replace("Bearer ", ""))?.sub;
                 const coin = await dbClient.collection('coins').findOne({_id: new ObjectId(input._id)});
-                if(coin){
+                if(coin && senderId === input.userId){
                     const subscribers: any[] = coin.subscribers;
                     if(!subscribers.find(subscribers => subscribers == input.userId)){
                         subscribers.push(String(input.userId));
@@ -42,6 +44,27 @@ export function buildCoinResolvers(dbClient: Db): any{
                     });
                     console.log(`${new Date()} : Adding a new coin subscriber`);
                     return true;
+                }
+                return false;
+            },
+            removeCoinsubscribers: async (_:any, input: any, req: any)=>{
+                const senderId = jwt.decode(req.user.replace("Bearer ", ""))?.sub;
+                const coin = await dbClient.collection('coins').findOne({_id: new ObjectId(input._id)});
+                if(coin && senderId === input.userId){
+                    let subscribers: any[] = coin.subscribers;
+                    if(subscribers.find(subscribers => subscribers == input.userId)){
+                        subscribers = subscribers.filter(subscriber=> subscriber != String(input.userId));
+                        await dbClient.collection('coins').updateOne({
+                            _id: new ObjectId(input._id)
+                        }, {
+                            $set: {
+                                subscribers: subscribers
+                            }
+                        });
+                        console.log(`${new Date()} : Removing a subscriber`);
+                        return true;
+                    }
+                    return false;
                 }
                 return false;
             },

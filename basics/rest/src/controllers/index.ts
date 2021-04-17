@@ -18,7 +18,7 @@ export function buildControllers(dependencies: ControllersDependencies){
     const getUserById = buildGetUser();
     const postUser = buildPostUser(dependencies.uuid, dependencies.hash);
     const loginUser = buildLoginUser(dependencies.verify, dependencies.signJWT, dependencies.cacheClient);
-    const logoutUser = buildLogoutUser(dependencies.cacheClient, dependencies.decode);
+    const logoutUser = buildLogoutUser(dependencies.cacheClient);
     return Object.freeze({
         getUsers,
         getUserById,

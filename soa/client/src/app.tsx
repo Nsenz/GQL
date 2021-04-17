@@ -1,81 +1,79 @@
-import React, {useState} from 'react';
-import {useMutation, gql, useQuery} from '@apollo/client';
+//Core
+import React, { useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 
+//Utils
+import { GlobalStore, GlobalStoreProvider } from './store';
+import { meQueryGQL } from './graphql/queries';
+import { loginMutationGQL } from './graphql/mutations';
+import { SECTION_KEYS } from './const';
+import { meQuery } from './graphql/queries/__generated__/meQuery';
+
+//Components
 import { Box } from 'wix-style-react';
 import { CoinTable } from './components/coinTable';
-import {WixSidebar} from './components/wixsidebar';
-import {AccountSettings} from './components/account';
+import { WixSidebar } from './components/wixsidebar';
+import { AccountSettings } from './components/account';
+import { FormikForm } from './components/form';
 
-import {SECTION_KEYS} from './const';
+const globalStore = new GlobalStore();
 
 const renderSection = (toRender: SECTION_KEYS) => {
-    switch(toRender){
+    switch (toRender) {
         case SECTION_KEYS.HOME:
-            return <CoinTable isWatchlist={false}/>;
+            return <CoinTable isWatchlist={false} />;
         case SECTION_KEYS.WATCHLIST:
             return <CoinTable isWatchlist={true} />;
         case SECTION_KEYS.ACCOUNT_SETTINGS:
-            return <AccountSettings />
+            return <AccountSettings />;
         default:
-            return <div>No component</div>
+            return <div>No component</div>;
     }
 };
 
-const loginMutation = gql`
-    mutation Login($username: String!, $password: String!){
-        login(username:$username,password:$password)
-    }
-`;
-
-const meQuery = gql`
-    query Me{
-        me {
-            _id
-            username
-            password
-            watchList {
-                name
-                rank
-            }
-        }
-    }
-`;
-
 export const App: React.FC = () => {
     const [selectedSection, setSelectionSection] = useState<SECTION_KEYS>(SECTION_KEYS.HOME);
-    const [login, _] = useMutation(loginMutation);
-    const {data, refetch} = useQuery(meQuery);
-    const [loggedIn, setLoggedIn] = useState<Boolean>(true);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [login] = useMutation(loginMutationGQL);
+    const { refetch, loading, startPolling, stopPolling } = useQuery<meQuery>(meQueryGQL, {
+        fetchPolicy: 'no-cache',
+        notifyOnNetworkStatusChange: true,
+        onCompleted(data: meQuery) {
+            globalStore.me = data.me;
+            setLoggedIn(true);
+            startPolling(500);
+        },
+        onError() {
+            globalStore.me = null;
+            setLoggedIn(false);
+            stopPolling();
+        },
+    });
+    const [loggedIn, setLoggedIn] = useState<Boolean>(false);
     return (
-            <Box align="center">
-                {data && loggedIn ? (
-                    <>
-                        <WixSidebar
-                            selectedSection={selectedSection}
-                            setSelectedSection={setSelectionSection}
-                            logout={setLoggedIn}
-                        />
-                        {renderSection(selectedSection)}
-                    </>
+        <GlobalStoreProvider store={globalStore}>
+            <Box>
+                {loading && !loggedIn ? (
+                    <></>
                 ) : (
-                    <form onSubmit={async (e)=>{
-                        e.preventDefault();
-                        const response = await login({variables: {username, password}});
-                        if(response.data.login){
-                            localStorage.setItem("token", response.data.login);
-                            refetch();
-                            setLoggedIn(true);
-                        }
-                    }}>
-                        <label htmlFor="username">Username: </label>
-                        <input type="text" id="username" name="username" onChange={(e)=>setUsername(e.target.value)}/>
-                        <label htmlFor="password">Password:</label>
-                        <input type="password" id="password" name="password" onChange={(e)=>setPassword(e.target.value)}/>
-                        <button type="submit">Login</button>
-                    </form>
+                    <>
+                        {loggedIn ? (
+                            <>
+                                <WixSidebar
+                                    selectedSection={selectedSection}
+                                    setSelectedSection={setSelectionSection}
+                                    login={setLoggedIn}
+                                />
+                                {renderSection(selectedSection)}
+                            </>
+                        ) : (
+                            <div style={{display: 'flex', justifyContent: 'center', width: '100%', 
+                            alignItems: 'center', height:'100vh'}}>
+                                <FormikForm handler={login} refetch={refetch} startPolling={startPolling} />
+                            </div>
+                        )}
+                    </>
                 )}
             </Box>
+        </GlobalStoreProvider>
     );
 };

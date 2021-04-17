@@ -42,8 +42,6 @@ const main = async ()=>{
     if(cluster.isMaster){
         cluster.fork();
         cluster.fork();
-        cluster.fork();
-        cluster.fork();
 
         cluster.on('exit', ()=>{
             cluster.fork();

@@ -25,6 +25,7 @@ export function checkAccess(cacheClient: CacheClientAccess, decode: (token: stri
                 res.status(403).send({ success: false }).end();
                 throw new Error("Token is invalid");
             }
+            (req as any).userId = decodedToken!.sub;
             next();
         });
     }

@@ -35,7 +35,8 @@ export const userType = gql`
     }
 
     extend type Mutation{
-      register(userInput: UserInput): Boolean
+      register(userInput: UserInput): Boolean!
       login(username: String!, password: String!): String
+      logout: Boolean!
     }
 `;

@@ -92,6 +92,19 @@ export const userResolvers: any = {
                 console.log(err);
                 return null;
             }
+        },
+        logout: async (_:any, __:any, req: any)=>{
+            try{
+                await axios.get(`${__wrappee__}/logout`, {
+                    headers: {
+                        Authorization: req.user.replace("Bearer ","")
+                    }
+                });
+                return true;
+            } catch(err){
+                console.log(err);
+                return false;
+            }
         }
     },
 }

@@ -18,8 +18,6 @@ const main = async () => {
     if(cluster.isMaster){
         cluster.fork();
         cluster.fork();
-        cluster.fork();
-        cluster.fork();
 
         cluster.on('exit', ()=>{
             console.log(`${new Date()} : A process has died...restarting`);
