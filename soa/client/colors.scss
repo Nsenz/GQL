@@ -1,0 +1,26 @@
+$DIT: #162D3D; //Day input text
+$NIT: #F0F4F7; //Night input text
+
+$DM: #F0F4F7; //Day background
+$NM: #1c2f3d; //Night background
+
+$DB0:  rgb(120, 216, 245); //Day button
+$DB1:  rgb(97, 210, 245); //Day active button
+$NB0: rgb(255, 148, 223); //Night button
+$NB1: rgb(255, 125, 216); //Night active button
+
+$ERB: rgba(250, 51, 51, 0.616); //Error background
+$ER0: #EE5951; //Error version 1
+$ER1: #D6453D; //Error version 2
+
+$SD10: rgba(22, 45, 61, 0.12);
+$SD20: rgba(22, 45, 61, 0.48);
+$SD30: rgba(22, 45, 61, 0.06);
+$SD40: rgba(22, 45, 61, 0.18);
+$SN10: rgba(214, 212, 212, 0.52);
+$SN20: rgba(255, 255, 255, 0.48);
+
+$Shadow10: 0 2px 1px 0 $SD20, 0 0 3px 0 $SD10;
+$Shadow20: 0 2px 4px 0 $SD10, 0 0 6px 0 $SD10;
+$Shadow30: 0 6px 6px 0 $SD30, 0 0 18px 0 $SD10;
+$Shadow40: 0 8px 8px 0 $SD10, 0 3px 24px 0 $SD40;

@@ -40,7 +40,7 @@ export const App: React.FC = () => {
         onCompleted(data: meQuery) {
             globalStore.me = data.me;
             setLoggedIn(true);
-            startPolling(500);
+            startPolling(1000);
         },
         onError() {
             globalStore.me = null;

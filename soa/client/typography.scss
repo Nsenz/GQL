@@ -1,0 +1,59 @@
+@import './fonts.scss';
+@import './colors.scss';
+
+$headers: (
+        /*    (font-weight,font-size, line-height, color, uppercase. letter-spacing)  */
+        "h1": ($FontSemiBold, 36px, 48px, $DIT, null, 1px),
+        "h2": ($FontMedium, 28px, 36px, $DIT, null, 1px),
+        "h3": ($FontRegular, 18px, 24px, $DIT, null, 1px),
+);
+$text: (
+        "tiny": ($FontRegular, 4px, 1, $DIT, null, 0.05rem),
+        "small": ($FontRegular, 12px, 1, $DIT, null, 0.05rem),
+        "medium": ($FontRegular, 14px, 1, $DIT, null, 0.05rem),
+        "large": ($FontRegular, 16px, 1, $DIT, null, 0.05rem)
+);
+
+/*tagName = (h1,h2,h3)*/
+@mixin getHeader($tagName){
+    $heading: map-get($headers, $tagName);
+
+    font-weight: nth($heading, 1);
+    font-size: nth($heading, 2);
+    line-height: nth($heading, 3);
+    color: nth($heading, 4);
+
+    @if nth($heading, 5) == UPPERCASE {
+        text-transform: uppercase;
+    }
+
+    letter-spacing: nth($heading, 6);
+}
+
+/*tagName = (tiny, small, medium, large)*/
+@mixin getText($tagName){
+    $text_: map-get($text, $tagName);
+
+    font-weight: nth($text_, 1);
+    font-size: nth($text_, 2);
+    line-height: nth($text_, 3);
+    color: nth($text_, 4);
+
+    @if nth($text_, 5) == UPPERCASE {
+        text-transform: uppercase;
+    }
+
+    letter-spacing: nth($text_, 6);
+}
+
+@mixin setColor($type){
+    @if $type == Day {
+        color: $DIT;
+    };
+    @if $type == Night {
+        color: $NIT;
+    };
+    @if $type == Error {
+        color: $ER0;
+    };
+}

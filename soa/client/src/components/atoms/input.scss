@@ -1,0 +1,46 @@
+@import '../../../typography.scss';
+@import '../../../colors.scss';
+@import '../../../animation.scss';
+
+.constructor__input{
+    display: inline-block;
+    border-radius: 1em;
+    @include getText('medium');
+    border: transparent;
+    background-color: $DM;
+    padding: 10px 12px;
+    transition: all $speed ease-in-out;
+}
+.constructor__input::placeholder{
+    @include getText('medium');
+}
+.constructor__input:focus{
+    background-color: $DB0;
+}
+.constructor__input_small{
+    @include getText('small');
+}
+.constructor__input_medium{
+    @include getText('medium');
+}
+.constructor__input_large{
+    @include getText('large');
+}
+.constructor__input_night{
+    background-color: $NM;
+    @include setColor(Night);
+}
+.constructor__input_night::placeholder{
+    @include setColor(Night);
+}
+.constructor__input_night:focus{
+    background-color: $NB0;
+}
+.constructor__input_error{
+    border: 1px solid $ER1;
+    background-color: $ERB;
+}
+.constructor__input_error:focus{
+    border: 1px solid $ER1;
+    background-color: $ERB;
+}

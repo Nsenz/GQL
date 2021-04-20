@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap');
+
+$FallbackFonts: "Helvetica Neue", "Helvetica", "Arial";
+
+$MainFont: "Baloo 2", $FallbackFonts;
+$FontRegular: 400;
+$FontMedium: 500;
+$FontSemiBold: 600;
+$FontBold: 700;
+$FontExtraBold: 800;
+
+@mixin FontRegular() {
+    font-family: $MainFont;
+    font-weight: $FontRegular; 
+}
+
+@mixin FontMedium(){
+    font-family: $MainFont;
+    font-weight: $FontMedium;
+}
+
+@mixin FontSemiBold(){
+    font-family: $MainFont;
+    font-weight: $FontSemiBold;
+}
+
+@mixin FontBold() {
+    font-family: $MainFont;
+    font-weight: $FontBold;    
+}
+
+@mixin FontExtraBold() {
+    font-family: $MainFont;
+    font-weight: $FontExtraBold;
+}

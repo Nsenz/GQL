@@ -1,0 +1,93 @@
+$navSizes: (
+    "small": 40px,
+    "medium": 60px,
+    "large": 80px
+);
+
+$borderRadiusOptions: (
+    "no": 0rem,
+    "rounded": 1rem,
+    "round": 3rem,
+    "circle": 50%
+);
+
+$navTypes: (
+    /*nav variants: (width %, geometry) */
+    "default": (100%, null)
+);
+
+$brickSizes: (
+    "small": 50px,
+    "medium": 200px,
+    "large": 400px
+);
+
+$loaderSizes: (
+    "small": map-get($navSizes, "small") * 0.3,
+    "medium": map-get($navSizes, "medium") * 0.3,
+    "large": map-get($navSizes, "large") * 0.3,
+);
+
+$iconSizes: (
+    "small": map-get($navSizes, "small") * 0.5,
+    "medium": map-get($navSizes, "medium") * 0.5,
+    "large": map-get($navSizes, "large") * 0.5,
+);
+
+$navItemSizes: (
+    "small": map-get($navSizes, "small") * 0.8,
+    "medium": map-get($navSizes, "medium") * 0.8,
+    "large": map-get($navSizes, "large") * 0.8
+);
+
+$borderRadius: 8px;
+
+@mixin getBrickSize($width, $height){
+    $sizeW: map-get($brickSizes, $width);
+    $sizeH: map-get($brickSizes, $height);
+    width: $sizeW;
+    height: $sizeH;
+}
+
+@mixin getIconSize($tagName){
+    $size: map-get($iconSizes, $tagName);
+    padding: $size * 0.1;
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+};
+
+@mixin getBorderRadius($tagName){
+    $radius: map-get($borderRadiusOptions, $tagName);
+    border-radius: $radius;
+}
+
+@mixin getLoaderSize($tagName){
+    $size: map-get($loaderSizes, $tagName);
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    margin: 0;
+    top: $size/1.4;
+    left: $size * 1.55;
+}
+
+@mixin getNavSize($tagName){
+    $size: map-get($navSizes, $tagName);
+    height: $size;
+}
+
+@mixin getNavItemWidth($tagName) {
+    $width: map-get($navItemSizes, $tagName);
+    width: $width;
+}
+
+@mixin getNavType($tagName){
+    $type: map-get($navTypes, $tagName);
+
+    width: nth($type, 1);
+
+    @if nth($type, 2) == PARTIAL {
+
+    };
+}

@@ -1,0 +1,21 @@
+@import "../../../typography.scss";
+@import "../../../animation.scss";
+@import "../../../colors.scss";
+
+.constructor__label{
+    display: inline;
+    @include getHeader("h2");
+    transition: all $speed ease-in-out;
+}
+.constructor__label_small{
+    @include getHeader("h3");
+}
+.constructor__label_medium{
+    @include getHeader("h2");
+}
+.constructor__label_large{
+    @include getHeader("h1");
+}
+.constructor__label_error{
+    @include setColor(Error);
+}

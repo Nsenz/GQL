@@ -48,22 +48,22 @@ export const userResolvers: any = {
                 }
             })).data;
             return currentUser;
-/*             const {dataloaders} = req;
-            let loader = dataloaders.get(info.fieldNodes);
-            if (!loader) {
-                loader = new DataLoader(async (ids: any) => {
-                    console.log(`${new Date()} : Getting subscribers`);
-                    const users: any = await (await axios.get(`${__wrappee__}/users`,{
-                        headers: {
-                            Authorization: req.user.replace("Bearer ", "")
-                        }
-                    })).data;
-                    const requestedUsers = ids.map((id: any) => users.results.find((user: { _id: any; }) => user._id === id));
-                    return requestedUsers;
-                });
-                dataloaders.set(info.fieldNodes, loader);
-            }
-            return loader.load(ref._id) */
+            // const {dataloaders} = req;
+            // let loader = dataloaders.get(info.fieldNodes);
+            // if (!loader) {
+            //     loader = new DataLoader(async (ids: any) => {
+            //         console.log(`${new Date()} : Getting subscribers`);
+            //         const users: any = await (await axios.get(`${__wrappee__}/users`,{
+            //             headers: {
+            //                 Authorization: req.user.replace("Bearer ", "")
+            //             }
+            //         })).data;
+            //         const requestedUsers = ids.map((id: any) => users.results.find((user: { _id: any; }) => user._id === id));
+            //         return requestedUsers;
+            //     });
+            //     dataloaders.set(info.fieldNodes, loader);
+            // }
+            // return loader.load(ref._id)
         },
     },
     Mutation: {
